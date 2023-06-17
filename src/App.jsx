@@ -1,35 +1,76 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import personService from "./services/personService";
+import Teacher from "./pages/Teacher";
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [persons, setPersons] = useState([]);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState(""); // Added role state
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedGuroUser");
+
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      personService.setToken(user.token);
+    }
+  }, []);
+
+  const handleRoleSelection = (selectedRole) => {
+    setRole(selectedRole);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="flex flex-col gap-4 p-4">
+      {role === "" ? ( // If role is not selected, render role selection
+        <div>
+          <h3>Please select your role:</h3>
+          <button onClick={() => handleRoleSelection("parent")}>Parent</button>
+          <button onClick={() => handleRoleSelection("teacher")}>
+            Teacher
+          </button>
+        </div>
+      ) : (
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Teacher
+                user={user}
+                persons={persons}
+                loading={loading}
+                setPersons={setPersons}
+                setUser={setUser}
+                setLoading={setLoading}
+              />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <LoginForm
+                user={user}
+                username={username}
+                password={password}
+                setUsername={setUsername}
+                setPassword={setPassword}
+                setUser={setUser}
+              />
+            }
+          />
+          <Route path="/register" element={<RegisterForm user={user} />} />
+        </Routes>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
