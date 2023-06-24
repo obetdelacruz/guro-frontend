@@ -32,7 +32,7 @@ function App() {
     <div className="flex flex-col gap-4 p-4">
       {role === "" ? ( // If role is not selected, render role selection
         <div>
-          <h3>Please select your role:</h3>
+          <h3 className="">Please select your role:</h3>
           <button onClick={() => handleRoleSelection("parent")}>Parent</button>
           <button onClick={() => handleRoleSelection("teacher")}>
             Teacher

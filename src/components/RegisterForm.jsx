@@ -32,22 +32,22 @@ function RegisterForm({ user }) {
     <div className="flex flex-col gap-4 items-center">
       {role === "" ? (
         <div className="text-center">
-          <h3>Please select your role:</h3>
+          <h3 className="text-2xl mb-4">Please select your role:</h3>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 text-white px-4 py-2 rounded m-2"
             onClick={() => handleRoleSelection("parent")}
           >
             Parent
           </button>
           <button
-            className="bg-green-500 text-white px-4 py-2 rounded"
+            className="bg-green-500 text-white px-4 py-2 rounded m-2"
             onClick={() => handleRoleSelection("teacher")}
           >
             Teacher
           </button>
         </div>
       ) : (
-        <div>
+        <div className="bg-orange-700 rounded-lg p-4">
           <h1 className="text-4xl mb-4 text-center font-bold">
             Register an account
           </h1>
